@@ -11,28 +11,28 @@ namespace TodoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoItemsController : ControllerBase
+    public class PlayersController : ControllerBase
     {
-        private readonly TodoContext _context;
+        private readonly PlayerContext _context;
 
-        public TodoItemsController(TodoContext context)
+        public PlayersController(PlayerContext context)
         {
             _context = context;
         }
 
-        // GET: api/TodoItems
+        // GET: api/Players
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
+        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
         {
-            return await _context.TodoItems.ToListAsync();
+            return await _context.Players.ToListAsync();
         }
 
 
-        // GET: api/TodoItems/5
+        // GET: api/Players/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
+        public async Task<ActionResult<Player>> GetPlayer(long id)
         {
-            var todoItem = await _context.TodoItems.FindAsync(id);
+            var todoItem = await _context.Players.FindAsync(id);
 
             if (todoItem == null)
             {
@@ -42,16 +42,16 @@ namespace TodoApi.Controllers
             return todoItem;
         }
 
-        // PUT: api/TodoItems/5
+        // PUT: api/Players/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(long id, TodoItem todoItem)
+        public async Task<IActionResult> PutPlayer(long id, Player player)
         {
-            if (id != todoItem.Id)
+            if (id != player.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(todoItem).State = EntityState.Modified;
+            _context.Entry(player).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace TodoApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TodoItemExists(id))
+                if (!PlayerExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace TodoApi.Controllers
             return NoContent();
         }
 
-        // POST: api/TodoItems
+        // POST: api/Players
         [HttpPost]
-        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
+        public async Task<ActionResult<Player>> PostPlayer(Player player)
         {
-            _context.TodoItems.Add(todoItem);
+            _context.Players.Add(player);
             await _context.SaveChangesAsync();
 
-            //    return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.Id }, todoItem);
+            //    return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
+            return CreatedAtAction(nameof(GetPlayer), new { id = player.Id }, player);
         }
 
-        // DELETE: api/TodoItems/5
+        // DELETE: api/Players/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodoItem(long id)
         {
-            var todoItem = await _context.TodoItems.FindAsync(id);
-            if (todoItem == null)
+            var player = await _context.Players.FindAsync(id);
+            if (player == null)
             {
                 return NotFound();
             }
 
-            _context.TodoItems.Remove(todoItem);
+            _context.Players.Remove(player);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TodoItemExists(long id)
+        private bool PlayerExists(long id)
         {
-            return _context.TodoItems.Any(e => e.Id == id);
+            return _context.Players.Any(e => e.Id == id);
         }
     }
 }
