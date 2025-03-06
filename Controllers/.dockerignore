@@ -1,0 +1,6 @@
+# Ignorar archivos y carpetas innecesarios
+bin/
+obj/
+.DS_Store
+.git/
+.vscode/

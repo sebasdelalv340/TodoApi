@@ -4,6 +4,7 @@ WORKDIR /source
 
 # Copia el archivo .csproj y restaura las dependencias
 COPY TodoApi.csproj .
+RUN dotnet nuget locals all --clear
 RUN dotnet restore
 
 # Copia todo el código fuente y construye la aplicación
