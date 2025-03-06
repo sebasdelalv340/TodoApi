@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /source
 
 # Copia el archivo .csproj y restaura las dependencias
-COPY *.csproj .
+COPY TodoApi.csproj .
 RUN dotnet restore
 
 # Copia todo el código fuente y construye la aplicación
