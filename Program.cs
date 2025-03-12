@@ -35,6 +35,7 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
     return client.GetDatabase(settings.DatabaseName);
 });
 
+
 // Configuración de los servicios
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -52,6 +53,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCors("AllowGodot");
 
 // Usar el puerto asignado por Render o predeterminado
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
