@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
-using TodoApi.Models;
+using TodoApi.Controllers.Models;
 
 namespace TodoApi.Controllers
 {
@@ -53,7 +53,7 @@ namespace TodoApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Players
+        // POST: api/Player
         [HttpPost]
         public async Task<ActionResult<Player>> PostPlayer(Player player)
         {

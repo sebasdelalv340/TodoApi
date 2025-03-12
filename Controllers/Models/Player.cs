@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace TodoApi.Models;
+namespace TodoApi.Controllers.Models;
 
 public class Player
 {

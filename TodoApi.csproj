@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <!-- Paquete de MongoDB actualizado -->
+    <PackageReference Include="dotenv.net" Version="3.2.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
 
     <!-- Swagger para documentación de la API -->
