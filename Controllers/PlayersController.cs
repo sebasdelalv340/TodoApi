@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using TodoApi.Controllers.Models;
 
@@ -21,6 +22,32 @@ namespace TodoApi.Controllers
         {
             var players = await _players.Find(_ => true).ToListAsync();
             return players;
+        }
+        
+        [HttpGet("top-scores")]
+        public async Task<ActionResult<IEnumerable<Player>>> GetTopScores()
+        {
+            try
+            {
+                // Obtener los 10 jugadores con las mejores puntuaciones
+                var topPlayers = await _players.Find(_ => true)
+                    .SortByDescending(p => p.MaxScore)  // Ordenar por MaxScore de mayor a menor
+                    .Limit(10)                          // Limitar a 10 resultados
+                    .ToListAsync();
+
+                // Devolver la lista de jugadores
+                return Ok(topPlayers);
+            }
+            catch (MongoException ex)
+            {
+                // Manejar errores de MongoDB
+                return StatusCode(500, $"Error al consultar la base de datos: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                // Manejar otros errores inesperados
+                return StatusCode(500, $"Ocurrió un error inesperado: {ex.Message}");
+            }
         }
 
         // GET: api/Players/5
@@ -53,12 +80,49 @@ namespace TodoApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Player
         [HttpPost]
-        public async Task<ActionResult<Player>> PostPlayer(Player player)
+        public async Task<ActionResult<Player>> PostPlayer([FromBody] Player? player)
         {
-            await _players.InsertOneAsync(player);
-            return CreatedAtAction(nameof(GetPlayer), new { id = player.Id }, player);
+            try
+            {
+                // Validar el objeto Player recibido
+                if (player == null)
+                {
+                    return BadRequest("El objeto Player no puede ser nulo.");
+                }
+
+                if (string.IsNullOrWhiteSpace(player.Name))
+                {
+                    return BadRequest("El nombre del jugador es obligatorio.");
+                }
+
+                if (player.MaxScore < 0)
+                {
+                    return BadRequest("La puntuación máxima no puede ser negativa.");
+                }
+
+                // Asignar un Id si no está definido
+                if (string.IsNullOrEmpty(player.Id))
+                {
+                    player.Id = ObjectId.GenerateNewId().ToString();
+                }
+
+                // Insertar el jugador en la base de datos
+                await _players.InsertOneAsync(player);
+
+                // Devolver una respuesta 201 (Created) con la ubicación del nuevo recurso
+                return CreatedAtAction(nameof(GetPlayer), new { id = player.Id }, player);
+            }
+            catch (MongoWriteException ex)
+            {
+                // Manejar errores de escritura en MongoDB
+                return StatusCode(500, $"Error al insertar el jugador en la base de datos: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                // Manejar otros errores inesperados
+                return StatusCode(500, $"Ocurrió un error inesperado: {ex.Message}");
+            }
         }
 
         // DELETE: api/Players/5
