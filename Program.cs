@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using TodoApi.Controllers;
-using TodoApi.Controllers.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,14 +9,9 @@ var mongoConnectionString = Environment.GetEnvironmentVariable("MONGO_CONNECTION
 var mongoDatabaseName = Environment.GetEnvironmentVariable("MONGO_DB_NAME");
 
 // Validar que las variables de entorno no estén vacías
-if (string.IsNullOrEmpty(mongoConnectionString))
+if (string.IsNullOrEmpty(mongoConnectionString) || string.IsNullOrEmpty(mongoDatabaseName))
 {
-    throw new InvalidOperationException("La cadena de conexión de MongoDB (MONGO_CONNECTION) no está configurada.");
-}
-
-if (string.IsNullOrEmpty(mongoDatabaseName))
-{
-    throw new InvalidOperationException("El nombre de la base de datos de MongoDB (MONGO_DB_NAME) no está configurado.");
+    throw new InvalidOperationException("MongoDB connection string or database name is missing.");
 }
 
 // Configurar MongoDbSettings con las variables de entorno
@@ -41,13 +35,6 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
     return client.GetDatabase(settings.DatabaseName);
 });
 
-// Registrar la colección de Players
-builder.Services.AddSingleton<IMongoCollection<Player>>(serviceProvider =>
-{
-    var database = serviceProvider.GetRequiredService<IMongoDatabase>();
-    return database.GetCollection<Player>("Players");
-});
-
 // Configuración de los servicios
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -69,3 +56,4 @@ app.MapControllers();
 // Usar el puerto asignado por Render o predeterminado
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 app.Run($"http://0.0.0.0:{port}");
+
