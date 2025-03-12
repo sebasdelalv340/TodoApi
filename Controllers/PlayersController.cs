@@ -10,9 +10,9 @@ namespace TodoApi.Controllers
     {
         private readonly IMongoCollection<Player> _players;
 
-        public PlayersController(IMongoCollection<Player> players)
+        public PlayersController(IMongoDatabase database)
         {
-            _players = players;
+            _players = database.GetCollection<Player>("Players");
         }
 
         // GET: api/Players

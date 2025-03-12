@@ -2,9 +2,9 @@ namespace TodoApi.Controllers;
 
 public record MongoDbSettings
 {
-    public string ConnectionString { get; init; }
-    public string DatabaseName { get; init; }
-
+    public string ConnectionString { get; set; }  // Cambia init por set
+    public string DatabaseName { get; set; }     // Cambia init por set
+    
     // Constructor personalizado para inicializar las propiedades
     public MongoDbSettings(string connectionString, string databaseName)
     {
@@ -12,6 +12,7 @@ public record MongoDbSettings
         DatabaseName = databaseName;
     }
 }
+
 
 
 
