@@ -36,7 +36,7 @@ namespace TodoApi.Controllers
                     .ToListAsync();
 
                 // Devolver la lista de jugadores
-                return Ok(topPlayers);
+                return topPlayers;
             }
             catch (MongoException ex)
             {
