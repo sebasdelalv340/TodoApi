@@ -1,7 +1,7 @@
 ﻿# Default ignored files
 /shelf/
 /workspace.xml
-.env
+/.env
 # Rider ignored files
 /projectSettingsUpdater.xml
 /.idea.TodoApi.iml
