@@ -101,12 +101,6 @@ namespace TodoApi.Controllers
                     return BadRequest("La puntuación máxima no puede ser negativa.");
                 }
 
-                // Asignar un Id si no está definido
-                if (string.IsNullOrEmpty(player.Id))
-                {
-                    player.Id = ObjectId.GenerateNewId().ToString();
-                }
-
                 // Insertar el jugador en la base de datos
                 await _players.InsertOneAsync(player);
 
